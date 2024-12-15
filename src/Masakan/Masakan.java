@@ -18,11 +18,12 @@ public class Masakan extends MyFrame {
     JLabel labelStatus;
     JTextField foodName;
     JTextField price;
-    JTextField status;
+    JLabel labelIdMenu;
     JButton btnTrx;
     JButton insert;
     JButton update;
     JButton delete;
+    JButton search;
 
     public Masakan() {
         super();
@@ -33,26 +34,39 @@ public class Masakan extends MyFrame {
         title.setFont(new Font("poppins", Font.BOLD, 25));
         this.add(title);
 
-        btnTrx = addButton(350, 25, 35, 100, "Transaksi");
+        btnTrx = addButton(350, 15, 35, 100, "Transaksi");
         this.add(btnTrx);
+
+        labelIdMenu = addLabel(350, 30, 80,300, "ID Menu");
+        labelIdMenu.setFont(new Font("poppins", Font.BOLD, 13));
+        this.add(labelIdMenu);
+        JComboBox idMenu = new JComboBox();
+        idMenu.setBounds(350, 85, 100, 27);
+        this.add(idMenu);
+
+        search = addButton(350, 130, 27, 100, "Search");
+        this.add(search);
+
+
+
 
         labelFoodName = addLabel(20, 60, 80, 300, "Nama Masakan");
         labelFoodName.setFont(new Font("poppins", Font.BOLD, 15));
         this.add(labelFoodName);
-        foodName = addTextField(180, 88, 27, 220);
+        foodName = addTextField(140, 88, 27, 180);
         this.add(foodName);
 
         labelPrice = addLabel(20, 100, 80, 300, "Harga");
         labelPrice.setFont(new Font("poppins", Font.BOLD, 15));
         this.add(labelPrice);
-        price = addTextField(180, 128, 27, 220);
+        price = addTextField(140, 128, 27, 180);
         this.add(price);
 
         labelStatus = addLabel(20, 140, 80, 300, "Status");
         labelStatus.setFont(new Font("poppins", Font.BOLD, 15));
         this.add(labelStatus);
         JComboBox status = new JComboBox(choise);
-        status.setBounds(180, 168, 220, 27);
+        status.setBounds(140, 168, 180, 27);
         this.add(status);
 
         insert = addButton(40, 218, 35, 130, "Insert");
@@ -91,9 +105,7 @@ public class Masakan extends MyFrame {
 
                     JOptionPane.showMessageDialog(null, "data berhasil ditambahakan");
 
-
                 }
-
 
             }
         });

@@ -18,6 +18,7 @@ public class Register extends MyFrame {
     JTextField textFieldPass;
     JButton btnSubmit;
     JButton btnLogin;
+
     public Register()
     {
         super();
