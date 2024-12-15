@@ -5,10 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Objects;
 
 public class Masakan extends MyFrame {
@@ -24,6 +21,7 @@ public class Masakan extends MyFrame {
     JButton update;
     JButton delete;
     JButton search;
+    JButton reset;
 
     public Masakan() {
         super();
@@ -44,11 +42,10 @@ public class Masakan extends MyFrame {
         idMenu.setBounds(350, 85, 100, 27);
         this.add(idMenu);
 
+        loadMenu(idMenu);
+
         search = addButton(350, 130, 27, 100, "Search");
         this.add(search);
-
-
-
 
         labelFoodName = addLabel(20, 60, 80, 300, "Nama Masakan");
         labelFoodName.setFont(new Font("poppins", Font.BOLD, 15));
@@ -69,14 +66,27 @@ public class Masakan extends MyFrame {
         status.setBounds(140, 168, 180, 27);
         this.add(status);
 
-        insert = addButton(40, 218, 35, 130, "Insert");
+        insert = addButton(25, 218, 35, 100, "Insert");
         this.add(insert);
 
-        update = addButton(180, 218, 35, 130, "Update");
+        update = addButton(135, 218, 35, 100, "Update");
         this.add(update);
 
-        delete = addButton(320, 218, 35, 130, "Delete");
+        delete = addButton(245, 218, 35, 100, "Delete");
         this.add(delete);
+
+        reset = addButton(355, 218,35, 100, "New");
+        this.add(reset);
+
+
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                foodName.setText("");
+                price.setText("");
+                status.setSelectedIndex(0);
+            }
+        });
 
         insert.addActionListener(new ActionListener() {
             @Override
@@ -110,6 +120,52 @@ public class Masakan extends MyFrame {
             }
         });
 
+        search.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
+                String user = "root";
+                String password = "";
+
+                Connection connection = null;
+                PreparedStatement preparedStatement = null;
+                ResultSet rs = null;
+
+                try {
+
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+
+                    connection = DriverManager.getConnection(url, user, password);
+
+                    String pid = idMenu.getSelectedItem().toString();
+                    int parsePID = Integer.parseInt(pid);
+
+                    String sql = "SELECT * from masakan where id_masakan = ?";
+                    preparedStatement = connection.prepareStatement(sql);
+                    preparedStatement.setInt(1, parsePID);
+
+                    rs = preparedStatement.executeQuery();
+                    while (rs.next() == true)
+                    {
+                        foodName.setText(rs.getString("nama_masakan"));
+                        price.setText(String.valueOf(rs.getInt("harga")));
+                        status.setSelectedItem(rs.getString("status"));
+
+                    }
+                } catch (ClassNotFoundException | SQLException err) {
+                    err.printStackTrace();
+                } finally {
+
+                    try {
+                        if (preparedStatement != null) preparedStatement.close();
+                        if (connection != null) connection.close();
+                    } catch (SQLException err) {
+                        err.printStackTrace();
+                    }
+                }
+            }
+        });
+
     }
 
     public void createDish(String foodName, int price, String status)
@@ -134,6 +190,44 @@ public class Masakan extends MyFrame {
             preparedStatement.setString(3, status);
 
             preparedStatement.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void loadMenu(JComboBox idmenu)
+    {
+        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
+        String user = "root";
+        String password = "";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            connection = DriverManager.getConnection(url, user, password);
+
+            String sql = "SELECT id_masakan FROM masakan";
+            preparedStatement = connection.prepareStatement(sql);
+
+            rs = preparedStatement.executeQuery();
+            while(rs.next())
+            {
+                idmenu.addItem(rs.getString("id_masakan"));
+            }
+
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
