@@ -88,6 +88,72 @@ public class Masakan extends MyFrame {
             }
         });
 
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String pid = idMenu.getSelectedItem().toString();
+                int parsePID = Integer.parseInt(pid);
+
+                try{
+
+                    deleteData(parsePID);
+                    foodName.setText("");
+                    price.setText("");
+                    status.setSelectedIndex(0);
+                    idMenu.setSelectedIndex(0);
+
+                    idMenu.removeAllItems();
+                    loadMenu(idMenu);
+
+                }
+                catch (Exception err)
+                {
+                    System.out.println("gagal");
+                }
+
+                JOptionPane.showMessageDialog(null, "data berhasil didelete");
+
+            }
+        });
+
+        update.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String food = foodName.getText();
+                String prc = price.getText();
+                String sts = Objects.requireNonNull(status.getSelectedItem()).toString();
+
+                String pid = idMenu.getSelectedItem().toString();
+                int parsePID = Integer.parseInt(pid);
+
+                if(food.isEmpty() || prc.isEmpty() || sts.isEmpty())
+                {
+                    JOptionPane.showMessageDialog(null, "data tidak boleh kosong");
+                }
+                else
+                {
+                    try{
+                        int parsePrice = Integer.parseInt(prc);
+                        updateData(food, parsePrice, sts, parsePID);
+                        foodName.setText("");
+                        price.setText("");
+                        status.setSelectedIndex(0);
+
+                        idMenu.removeAllItems();
+                        loadMenu(idMenu);
+                    }
+                    catch (Exception err)
+                    {
+                        System.out.println("gagal");
+                    }
+
+                    JOptionPane.showMessageDialog(null, "data berhasil diupdate");
+
+                }
+
+            }
+        });
+
         insert.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,10 +161,13 @@ public class Masakan extends MyFrame {
                 String prc = price.getText();
                 String sts = Objects.requireNonNull(status.getSelectedItem()).toString();
 
+
+
                 if(food.isEmpty() || prc.isEmpty() || sts.isEmpty())
                 {
                     JOptionPane.showMessageDialog(null, "data tidak boleh kosong");
-                }else
+                }
+                else
                 {
                     try{
                         int parsePrice = Integer.parseInt(prc);
@@ -106,6 +175,9 @@ public class Masakan extends MyFrame {
                         foodName.setText("");
                         price.setText("");
                         status.setSelectedIndex(0);
+
+                        idMenu.removeAllItems();
+                        loadMenu(idMenu);
 
                     }
                     catch (Exception err)
@@ -166,6 +238,78 @@ public class Masakan extends MyFrame {
             }
         });
 
+    }
+
+    public void deleteData(int ID)
+    {
+        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
+        String user = "root";
+        String password = "";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            connection = DriverManager.getConnection(url, user, password);
+
+            String sql = "DELETE FROM masakan where id_masakan = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, ID);
+
+
+            preparedStatement.executeUpdate();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updateData(String foodName, int price, String status, int ID)
+    {
+        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
+        String user = "root";
+        String password = "";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            connection = DriverManager.getConnection(url, user, password);
+
+            String sql = "UPDATE masakan SET nama_masakan = ?, harga = ?, status = ? where id_masakan = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, foodName);
+            preparedStatement.setInt(2, price);
+            preparedStatement.setString(3, status);
+            preparedStatement.setInt(4, ID);
+
+
+            preparedStatement.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void createDish(String foodName, int price, String status)
