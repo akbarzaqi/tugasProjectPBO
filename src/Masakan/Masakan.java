@@ -2,6 +2,7 @@ package Masakan;
 import MainWindow.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +23,8 @@ public class Masakan extends MyFrame {
     JButton delete;
     JButton search;
     JButton reset;
+
+    
 
     public Masakan() {
         super();
@@ -78,6 +81,8 @@ public class Masakan extends MyFrame {
         reset = addButton(355, 218,35, 100, "New");
         this.add(reset);
 
+        showData();
+
 
         reset.addActionListener(new ActionListener() {
             @Override
@@ -85,6 +90,7 @@ public class Masakan extends MyFrame {
                 foodName.setText("");
                 price.setText("");
                 status.setSelectedIndex(0);
+                showData();
             }
         });
 
@@ -104,6 +110,7 @@ public class Masakan extends MyFrame {
 
                     idMenu.removeAllItems();
                     loadMenu(idMenu);
+                    showData();
 
                 }
                 catch (Exception err)
@@ -141,6 +148,7 @@ public class Masakan extends MyFrame {
 
                         idMenu.removeAllItems();
                         loadMenu(idMenu);
+                        showData();
                     }
                     catch (Exception err)
                     {
@@ -178,6 +186,7 @@ public class Masakan extends MyFrame {
 
                         idMenu.removeAllItems();
                         loadMenu(idMenu);
+                        showData();
 
                     }
                     catch (Exception err)
@@ -238,6 +247,63 @@ public class Masakan extends MyFrame {
             }
         });
 
+    }
+
+    public void showData()
+    {
+        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
+        String user = "root";
+        String password = "";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            connection = DriverManager.getConnection(url, user, password);
+
+            String sql = "SELECT * FROM masakan";
+            preparedStatement = connection.prepareStatement(sql);
+
+
+            rs = preparedStatement.executeQuery();
+            String column[] = {"id masakan", "nama masakan", "harga", "status"};
+            DefaultTableModel tblModel = new DefaultTableModel(null, column);
+
+            while(rs.next())
+            {
+                String id = String.valueOf(rs.getInt("id_masakan"));
+                String foodName = rs.getString("nama_masakan");
+                String price = rs.getString("harga");
+                String status = rs.getString("status");
+
+                String data[] = {id, foodName, price, status};
+                tblModel.addRow(data);
+
+            }
+
+            JTable dishTable = new JTable(tblModel);
+            JScrollPane scrollPane = new JScrollPane(dishTable);
+            this.add(scrollPane);
+            scrollPane.setBounds(20, 270, 450, 160);
+
+            this.revalidate();
+            this.repaint();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void deleteData(int ID)
