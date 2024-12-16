@@ -290,9 +290,6 @@ public class Masakan extends MyFrame {
             this.add(scrollPane);
             scrollPane.setBounds(20, 270, 450, 160);
 
-            this.revalidate();
-            this.repaint();
-
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
