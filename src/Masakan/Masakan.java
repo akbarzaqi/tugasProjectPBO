@@ -1,5 +1,6 @@
 package Masakan;
 import MainWindow.*;
+import Transaksi.Transaksi;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -83,6 +84,13 @@ public class Masakan extends MyFrame {
 
         showData();
 
+        btnTrx.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Transaksi();
+                dispose();
+            }
+        });
 
         reset.addActionListener(new ActionListener() {
             @Override
