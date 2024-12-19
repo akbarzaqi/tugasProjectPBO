@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2024 at 10:48 AM
+-- Generation Time: Dec 20, 2024 at 12:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,9 +39,12 @@ CREATE TABLE `masakan` (
 --
 
 INSERT INTO `masakan` (`id_masakan`, `nama_masakan`, `harga`, `status`) VALUES
-(5, 'nasi goreng', 10000, 'tersedia'),
+(5, 'nasi goreng', 12000, 'tersedia'),
 (6, 'mie', 10000, 'habis'),
-(7, 'mie ayam', 10000, 'tersedia');
+(7, 'mie ayam', 10000, 'tersedia'),
+(9, 'indomie goreng', 10000, 'tersedia'),
+(10, 'bakso', 10000, 'tersedia'),
+(11, 'ayam goreng', 15000, 'tersedia');
 
 -- --------------------------------------------------------
 
@@ -53,12 +56,18 @@ CREATE TABLE `transaksi` (
   `id_transaksi` int(11) NOT NULL,
   `nama_pelanggan` varchar(50) DEFAULT NULL,
   `id_masakan` int(11) DEFAULT NULL,
-  `tanggal` date DEFAULT NULL,
-  `nama_masakan` varchar(100) DEFAULT NULL,
-  `harga` int(11) DEFAULT NULL,
+  `tanggal` varchar(50) DEFAULT NULL,
   `qty` int(11) DEFAULT NULL,
   `total_harga` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `transaksi`
+--
+
+INSERT INTO `transaksi` (`id_transaksi`, `nama_pelanggan`, `id_masakan`, `tanggal`, `qty`, `total_harga`) VALUES
+(2, 'arvin', 5, '2024-12-04', 2, 24000),
+(3, 'akbar', 6, '2024-12-05', 2, 20000);
 
 -- --------------------------------------------------------
 
@@ -111,13 +120,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `masakan`
 --
 ALTER TABLE `masakan`
-  MODIFY `id_masakan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_masakan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user`
