@@ -4,6 +4,7 @@ import MainWindow.*;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,8 @@ public class MenuTransaksi extends MyFrame {
     JButton search;
     JButton update;
     JButton createTrx;
+    JButton delete;
+    JButton report;
     JDateChooser calendar;
     public MenuTransaksi()
     {
@@ -76,12 +79,46 @@ public class MenuTransaksi extends MyFrame {
         qty = addTextField(150, 208, 27, 190);
         this.add(qty);
 
-        update = addButton(250, 248, 35, 90, "Update");
+        update = addButton(150, 248, 35, 90, "Update");
         this.add(update);
 
 
-        createTrx = addButton(150, 248, 35, 95, "Add Trx");
+        createTrx = addButton(50, 248, 35, 95, "Add Trx");
         this.add(createTrx);
+
+        delete = addButton(250, 248, 35, 95, "Delete");
+        this.add(delete);
+
+        report = addButton(350, 248, 35, 95, "Print");
+        this.add(report);
+
+        showDataTransaction();
+
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String idTrx = IDTrx.getSelectedItem().toString();
+                int parseID = Integer.parseInt(idTrx);
+
+                try{
+                    deleteDataTransaction(parseID);
+                    IDTrx.setSelectedItem("");
+                    namaPelanggan.setText("");
+                    idMasakan.setSelectedIndex(0);
+                    calendar.setCalendar(null);
+                    qty.setText("");
+                    idMasakan.removeAllItems();
+                    IDTrx.removeAllItems();
+                    loadIDMasakan(idMasakan);
+                    loadIDTransaksi(IDTrx);
+                    showDataTransaction();
+
+                }catch (Exception err)
+                {
+                    throw(err);
+                }
+            }
+        });
 
         createTrx.addActionListener(new ActionListener() {
             @Override
@@ -146,6 +183,7 @@ public class MenuTransaksi extends MyFrame {
                         IDTrx.removeAllItems();
                         loadIDMasakan(idMasakan);
                         loadIDTransaksi(IDTrx);
+                        showDataTransaction();
                     }
                     catch (Exception err)
                     {
@@ -181,8 +219,11 @@ public class MenuTransaksi extends MyFrame {
 
                     rs = preparedStatement.executeQuery();
 
+                    idMasakan.removeAllItems();
+                    IDTrx.removeAllItems();
                     loadIDMasakan(idMasakan);
                     loadIDTransaksi(IDTrx);
+                    showDataTransaction();
                     while (rs.next() == true)
                     {
                         namaPelanggan.setText(rs.getString("nama_pelanggan"));
@@ -207,6 +248,8 @@ public class MenuTransaksi extends MyFrame {
 
         });
     }
+
+
 
     public void updateData(int transactionID, String cusName, int dishID, String date, int qty, int totalPrice)
     {
@@ -325,6 +368,104 @@ public class MenuTransaksi extends MyFrame {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void deleteDataTransaction(int ID)
+    {
+        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
+        String user = "root";
+        String password = "";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            connection = DriverManager.getConnection(url, user, password);
+
+            String sql = "DELETE FROM transaksi where id_transaksi = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, ID);
+
+
+            preparedStatement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "data berhasil didelete");
+
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void showDataTransaction()
+    {
+        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
+        String user = "root";
+        String password = "";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            connection = DriverManager.getConnection(url, user, password);
+
+            String sql = "SELECT * FROM transaksi";
+            preparedStatement = connection.prepareStatement(sql);
+
+
+            rs = preparedStatement.executeQuery();
+            String column[] = {"ID Transaksi", "Nama Pelanggan", "ID Masakan", "tgl", "qty", "total harga"};
+            DefaultTableModel tblModel = new DefaultTableModel(null, column);
+
+            while(rs.next())
+            {
+                String TrxID = String.valueOf(rs.getInt("id_transaksi"));
+                String cusName = rs.getString("nama_pelanggan");
+                String DishID = rs.getString("id_masakan");
+                String tgl = rs.getString("tanggal");
+                String qty = rs.getString("qty");
+                String totalPrice = rs.getString("total_harga");
+
+                String data[] = {TrxID, cusName, DishID, tgl, qty, totalPrice};
+                tblModel.addRow(data);
+
+            }
+
+            JTable dishTable = new JTable(tblModel);
+            JScrollPane scrollPane = new JScrollPane(dishTable);
+            this.add(scrollPane);
+            scrollPane.setBounds(20, 300, 450, 160);
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void printDataTransaction()
+    {
+
     }
 
 }
