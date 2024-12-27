@@ -1,7 +1,6 @@
 package Transaksi;
 import MainWindow.*;
 import Masakan.Masakan;
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
@@ -82,6 +81,14 @@ public class Transaksi extends MyFrame {
             }
         });
 
+        showDataTrx.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MenuTransaksi();
+                dispose();
+            }
+        });
+
         insert.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,16 +103,10 @@ public class Transaksi extends MyFrame {
 
                 String cus = namaPelanggan.getText();
                 String idMskn = Objects.requireNonNull(idMasakan.getSelectedItem()).toString();
-                String idMasak = "";
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String date = sdf.format(calendar.getDate());
                 String quantity = qty.getText();
 
-                if(idMskn != null && !idMskn.isEmpty())
-                {
-                    String[] parts = idMskn.split(" \\| ");
-                    idMasak = parts[0];
-                }
 
                 try{
                     Class.forName("com.mysql.cj.jdbc.Driver");
@@ -113,7 +114,7 @@ public class Transaksi extends MyFrame {
                     connection = DriverManager.getConnection(url, user, password);
 
                     int parseQty = Integer.parseInt(quantity);
-                    int parseID = Integer.parseInt(idMasak);
+                    int parseID = Integer.parseInt(idMskn);
                     int harga = 0;
 
                     String sql = "SELECT * from masakan where id_masakan = ?";
@@ -223,7 +224,7 @@ public class Transaksi extends MyFrame {
             rs = preparedStatement.executeQuery();
             while(rs.next())
             {
-                idMenu.addItem(rs.getString("id_masakan") + " | " + rs.getString("nama_masakan") + " | " + rs.getInt("harga"));
+                idMenu.addItem(rs.getString("id_masakan"));
             }
 
         } catch (ClassNotFoundException | SQLException e) {
@@ -237,6 +238,11 @@ public class Transaksi extends MyFrame {
                 e.printStackTrace();
             }
         }
+    }
+
+    public JComboBox getIDMasakan()
+    {
+        return idMasakan;
     }
 
 
