@@ -102,32 +102,39 @@ public class Masakan extends MyFrame {
             }
         });
 
-        delete.addActionListener(new ActionListener() {
+         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String pid = idMenu.getSelectedItem().toString();
+                String food = foodName.getText();
+                String prc = price.getText();
+                String sts = Objects.requireNonNull(status.getSelectedItem()).toString();
                 int parsePID = Integer.parseInt(pid);
+                if (food.isEmpty() || prc.isEmpty() || sts.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "data tidak boleh kosong");
+                } else {
+                    try {
 
-                try{
+                        deleteData(parsePID);
 
-                    deleteData(parsePID);
-                    foodName.setText("");
-                    price.setText("");
-                    status.setSelectedIndex(0);
-                    idMenu.setSelectedIndex(0);
+                        foodName.setText("");
+                        price.setText("");
+                        status.setSelectedIndex(0);
+                        idMenu.setSelectedIndex(0);
 
-                    idMenu.removeAllItems();
-                    loadMenu(idMenu);
-                    showData();
+                        idMenu.removeAllItems();
+                        loadMenu(idMenu);
+                        showData();
+
+                    } catch (
+                            Exception err)
+                    {
+                        System.out.println("gagal");
+                    }
+
+                    JOptionPane.showMessageDialog(null, "data berhasil didelete");
 
                 }
-                catch (Exception err)
-                {
-                    System.out.println("gagal");
-                }
-
-                JOptionPane.showMessageDialog(null, "data berhasil didelete");
-
             }
         });
 
