@@ -1,6 +1,7 @@
 package Transaksi;
 
 import MainWindow.*;
+import Koneksi.*;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
@@ -130,9 +131,6 @@ public class MenuTransaksi extends MyFrame {
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-                String user = "root";
-                String password = "";
 
                 Connection connection = null;
                 PreparedStatement preparedStatement = null;
@@ -154,9 +152,7 @@ public class MenuTransaksi extends MyFrame {
                 else
                 {
                     try{
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-
-                        connection = DriverManager.getConnection(url, user, password);
+                        connection = Conn.getConnection();
 
                         int parseIdTrx = Integer.parseInt(idTransaction);
                         int parseIdMasakan = Integer.parseInt(idMskn);
@@ -213,9 +209,7 @@ public class MenuTransaksi extends MyFrame {
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-                String user = "root";
-                String password = "";
+
 
                 Connection connection = null;
                 PreparedStatement preparedStatement = null;
@@ -223,9 +217,7 @@ public class MenuTransaksi extends MyFrame {
 
                 try {
 
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-
-                    connection = DriverManager.getConnection(url, user, password);
+                    connection = Conn.getConnection();
 
                     String idTrx = IDTrx.getSelectedItem().toString();
                     int parsePID = Integer.parseInt(idTrx);
@@ -250,7 +242,7 @@ public class MenuTransaksi extends MyFrame {
                         idMasakan.setSelectedItem(rs.getString("id_masakan"));
 
                     }
-                } catch (ClassNotFoundException | SQLException err) {
+                } catch (SQLException err) {
                     err.printStackTrace();
                 } finally {
 
@@ -270,18 +262,12 @@ public class MenuTransaksi extends MyFrame {
 
     public void updateData(int transactionID, String cusName, int dishID, String date, int qty, int totalPrice)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "UPDATE transaksi SET nama_pelanggan = ?, id_masakan = ?, tanggal = ?, qty = ?, total_harga = ? where id_transaksi = ?";
             preparedStatement = connection.prepareStatement(sql);
@@ -295,7 +281,7 @@ public class MenuTransaksi extends MyFrame {
 
             preparedStatement.executeUpdate();
             JOptionPane.showMessageDialog(null, "data berhasil diupdate");
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 
@@ -312,9 +298,6 @@ public class MenuTransaksi extends MyFrame {
 
     public void loadIDTransaksi(JComboBox IdTrx)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -322,9 +305,7 @@ public class MenuTransaksi extends MyFrame {
 
         try {
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "SELECT id_transaksi FROM transaksi";
             preparedStatement = connection.prepareStatement(sql);
@@ -335,7 +316,7 @@ public class MenuTransaksi extends MyFrame {
                 IdTrx.addItem(rs.getString("id_transaksi") );
             }
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 
@@ -351,19 +332,13 @@ public class MenuTransaksi extends MyFrame {
 
     public void loadIDMasakan(JComboBox IdMasak)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
 
         try {
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "SELECT * FROM masakan";
             preparedStatement = connection.prepareStatement(sql);
@@ -374,7 +349,7 @@ public class MenuTransaksi extends MyFrame {
                 IdMasak.addItem(rs.getString("id_masakan"));
             }
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 
@@ -389,18 +364,12 @@ public class MenuTransaksi extends MyFrame {
 
     public void deleteDataTransaction(int ID)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "DELETE FROM transaksi where id_transaksi = ?";
             preparedStatement = connection.prepareStatement(sql);
@@ -411,7 +380,7 @@ public class MenuTransaksi extends MyFrame {
             JOptionPane.showMessageDialog(null, "data berhasil didelete");
 
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 
@@ -426,9 +395,6 @@ public class MenuTransaksi extends MyFrame {
 
     public void showDataTransaction()
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -436,9 +402,7 @@ public class MenuTransaksi extends MyFrame {
 
         try {
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "SELECT * FROM transaksi";
             preparedStatement = connection.prepareStatement(sql);
@@ -467,7 +431,7 @@ public class MenuTransaksi extends MyFrame {
             this.add(scrollPane);
             scrollPane.setBounds(20, 300, 450, 160);
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 

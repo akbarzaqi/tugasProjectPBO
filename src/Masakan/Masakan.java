@@ -1,4 +1,5 @@
 package Masakan;
+import Koneksi.*;
 import MainWindow.*;
 import Transaksi.Transaksi;
 
@@ -10,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.Objects;
 
-public class Masakan extends MyFrame {
+public class Masakan extends MyFrame  {
     JLabel title;
     JLabel labelFoodName;
     JLabel labelPrice;
@@ -219,19 +220,13 @@ public class Masakan extends MyFrame {
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-                String user = "root";
-                String password = "";
-
                 Connection connection = null;
                 PreparedStatement preparedStatement = null;
                 ResultSet rs = null;
 
                 try {
 
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-
-                    connection = DriverManager.getConnection(url, user, password);
+                    connection = Conn.getConnection();
 
                     String pid = idMenu.getSelectedItem().toString();
                     int parsePID = Integer.parseInt(pid);
@@ -248,7 +243,7 @@ public class Masakan extends MyFrame {
                         status.setSelectedItem(rs.getString("status"));
 
                     }
-                } catch (ClassNotFoundException | SQLException err) {
+                } catch (SQLException err) {
                     err.printStackTrace();
                 } finally {
 
@@ -266,19 +261,13 @@ public class Masakan extends MyFrame {
 
     public void showData()
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
 
         try {
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "SELECT * FROM masakan";
             preparedStatement = connection.prepareStatement(sql);
@@ -305,7 +294,7 @@ public class Masakan extends MyFrame {
             this.add(scrollPane);
             scrollPane.setBounds(20, 270, 450, 160);
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 
@@ -320,18 +309,11 @@ public class Masakan extends MyFrame {
 
     public void deleteData(int ID)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "DELETE FROM masakan where id_masakan = ?";
             preparedStatement = connection.prepareStatement(sql);
@@ -340,7 +322,7 @@ public class Masakan extends MyFrame {
 
             preparedStatement.executeUpdate();
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 
@@ -355,18 +337,11 @@ public class Masakan extends MyFrame {
 
     public void updateData(String foodName, int price, String status, int ID)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "UPDATE masakan SET nama_masakan = ?, harga = ?, status = ? where id_masakan = ?";
             preparedStatement = connection.prepareStatement(sql);
@@ -377,7 +352,7 @@ public class Masakan extends MyFrame {
 
 
             preparedStatement.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 
@@ -392,18 +367,11 @@ public class Masakan extends MyFrame {
 
     public void createDish(String foodName, int price, String status)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "INSERT INTO masakan (nama_masakan, harga, status) VALUES (?, ?, ?)";
             preparedStatement = connection.prepareStatement(sql);
@@ -412,7 +380,7 @@ public class Masakan extends MyFrame {
             preparedStatement.setString(3, status);
 
             preparedStatement.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 
@@ -427,9 +395,6 @@ public class Masakan extends MyFrame {
 
     public void loadMenu(JComboBox idmenu)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -437,9 +402,7 @@ public class Masakan extends MyFrame {
 
         try {
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "SELECT id_masakan FROM masakan";
             preparedStatement = connection.prepareStatement(sql);
@@ -450,7 +413,7 @@ public class Masakan extends MyFrame {
                 idmenu.addItem(rs.getString("id_masakan"));
             }
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 

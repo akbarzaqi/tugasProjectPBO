@@ -1,5 +1,6 @@
 package User;
 import MainWindow.*;
+import Koneksi.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,18 +80,12 @@ public class Register extends MyFrame {
 
     public void createUser(String uname, String pass)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String password = "";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, password);
+            connection = Conn.getConnection();
 
             String sql = "INSERT INTO user (username, password) VALUES (?, ?)";
             preparedStatement = connection.prepareStatement(sql);
@@ -98,7 +93,7 @@ public class Register extends MyFrame {
             preparedStatement.setString(2, pass);
 
             preparedStatement.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 

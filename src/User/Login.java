@@ -1,4 +1,5 @@
 package User;
+import Koneksi.*;
 import MainWindow.MyFrame;
 import Masakan.Masakan;
 
@@ -75,19 +76,13 @@ public class Login extends MyFrame {
 
     boolean validateLogin(String username, String password)
     {
-        String url = "jdbc:mysql://127.0.0.1:3306/tugas_project";
-        String user = "root";
-        String pass = "";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet rs = null;
 
         try {
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection(url, user, pass);
+            connection = Conn.getConnection();
 
             String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
             preparedStatement = connection.prepareStatement(sql);
@@ -99,7 +94,7 @@ public class Login extends MyFrame {
             if(rs.next())
                 return true;
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
 
