@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.PrinterException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
@@ -22,22 +23,20 @@ public class MenuTransaksi extends MyFrame {
     JComboBox IDTrx;
     JTextField namaPelanggan;
     JTextField qty;
-    JButton btnMenu;
     JButton search;
     JButton update;
     JButton createTrx;
     JButton delete;
     JButton report;
     JDateChooser calendar;
+    DefaultTableModel tblModel;
+    JTable trxTable;
     public MenuTransaksi()
     {
         super();
         title = addLabel(60, 0, 80, 210, "Data Transaksi");
         title.setFont(new Font("poppins", Font.BOLD, 25));
         this.add(title);
-
-        btnMenu = addButton(350, 15, 35, 100, "Menu");
-        this.add(btnMenu);
 
         labelIDTrx = addLabel(360, 35, 80, 100, "ID Transaksi");
         labelIDTrx.setFont(new Font("poppins", Font.BOLD, 15));
@@ -188,6 +187,24 @@ public class MenuTransaksi extends MyFrame {
                     catch (Exception err)
                     {
                         System.out.println("gagal");
+                    }
+                }
+            }
+        });
+
+        report.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try
+                {
+                    trxTable.print();
+                }
+                catch (Exception err)
+                {
+                    try {
+                        throw (err);
+                    } catch (PrinterException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
             }
@@ -429,7 +446,7 @@ public class MenuTransaksi extends MyFrame {
 
             rs = preparedStatement.executeQuery();
             String column[] = {"ID Transaksi", "Nama Pelanggan", "ID Masakan", "tgl", "qty", "total harga"};
-            DefaultTableModel tblModel = new DefaultTableModel(null, column);
+            tblModel = new DefaultTableModel(null, column);
 
             while(rs.next())
             {
@@ -445,8 +462,8 @@ public class MenuTransaksi extends MyFrame {
 
             }
 
-            JTable dishTable = new JTable(tblModel);
-            JScrollPane scrollPane = new JScrollPane(dishTable);
+            trxTable = new JTable(tblModel);
+            JScrollPane scrollPane = new JScrollPane(trxTable);
             this.add(scrollPane);
             scrollPane.setBounds(20, 300, 450, 160);
 
@@ -463,10 +480,8 @@ public class MenuTransaksi extends MyFrame {
         }
     }
 
-    public void printDataTransaction()
-    {
-
-    }
 
 }
+
+
 

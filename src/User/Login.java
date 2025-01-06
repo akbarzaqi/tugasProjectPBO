@@ -13,7 +13,7 @@ public class Login extends MyFrame {
     JLabel username;
     JLabel password;
     JTextField uname;
-    JTextField pass;
+    JPasswordField pass;
     JButton btnSubmit;
     JButton btnRegis;
 
@@ -30,7 +30,7 @@ public class Login extends MyFrame {
         this.add(uname);
 
         password = addLabel(150, 180, 30, 100, "Password");
-        pass = addTextField(150, 210, 30, 200);
+        pass = addPasswordField(150, 210, 30, 200);
         this.add(password);
         this.add(pass);
 

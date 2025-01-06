@@ -15,7 +15,7 @@ public class Register extends MyFrame {
     JLabel labelUname;
     JLabel labelPass;
     JTextField textFieldUname;
-    JTextField textFieldPass;
+    JPasswordField textFieldPass;
     JButton btnSubmit;
     JButton btnLogin;
 
@@ -32,7 +32,7 @@ public class Register extends MyFrame {
         this.add(textFieldUname);
 
         labelPass = addLabel(150, 180, 30, 100, "Password");
-        textFieldPass = addTextField(150, 210, 30, 200);
+        textFieldPass = addPasswordField(150, 210, 30, 200);
         this.add(labelPass);
         this.add(textFieldPass);
 

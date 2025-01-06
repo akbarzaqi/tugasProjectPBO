@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 public class MyFrame extends JFrame implements ActionListener {
     JButton button;
+
+
     public MyFrame()
     {
         this.setTitle("main frame");
@@ -36,6 +38,13 @@ public class MyFrame extends JFrame implements ActionListener {
         JTextField textField = new JTextField();
         textField.setBounds(x, y, width, height);
         return textField;
+    }
+
+    public JPasswordField addPasswordField(int x, int y, int height, int widht)
+    {
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds(x, y, widht, height);
+        return passwordField;
     }
 
 

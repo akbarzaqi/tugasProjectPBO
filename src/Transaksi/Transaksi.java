@@ -22,6 +22,7 @@ public class Transaksi extends MyFrame {
     JTextField qty;
     JButton btnMenu;
     JButton insert;
+    JButton back;
     JButton showDataTrx;
     JDateChooser calendar;
 
@@ -34,9 +35,6 @@ public class Transaksi extends MyFrame {
         title = addLabel(60, 0, 80, 210, "Menu Transaksi");
         title.setFont(new Font("poppins", Font.BOLD, 25));
         this.add(title);
-
-        btnMenu = addButton(350, 15, 35, 100, "Menu");
-        this.add(btnMenu);
 
         labelNamaPelanggan = addLabel(20, 60, 80, 300, "Nama Pelanggan");
         labelNamaPelanggan.setFont(new Font("poppins", Font.BOLD, 15));
@@ -66,6 +64,9 @@ public class Transaksi extends MyFrame {
         qty = addTextField(150, 208, 27, 280);
         this.add(qty);
 
+        back = addButton(110, 248, 35, 100, "Back");
+        this.add(back);
+
         insert = addButton(330, 248, 35, 100, "Insert");
         this.add(insert);
 
@@ -73,7 +74,7 @@ public class Transaksi extends MyFrame {
         showDataTrx = addButton(220, 248, 35, 100, "Show Data");
         this.add(showDataTrx);
 
-        btnMenu.addActionListener(new ActionListener() {
+        back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new Masakan();
